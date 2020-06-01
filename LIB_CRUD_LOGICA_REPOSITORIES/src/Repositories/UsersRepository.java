@@ -46,6 +46,7 @@ public class UsersRepository {
 
     public ArrayList<Users> List() {
         try {
+            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
             Connection connection = DriverManager.getConnection(
                     "jdbc:sqlserver://localhost;databaseName=crud_user;user=sa;password=0mil2002;");
             String query = "SELECT * FROM Users;";

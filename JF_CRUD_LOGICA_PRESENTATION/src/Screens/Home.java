@@ -208,7 +208,13 @@ public class Home extends javax.swing.JFrame {
             Users user = new Users();
             user.setName(txName.getText());
             user.setPassword(txPassword.getText());
-            user.setState((txState.toString() == "Activo") ? true : false);
+            String state = txState.toString();
+            if(state.equals("Activo")){
+                user.setState(true);
+            }else{
+                user.setState(false);
+            }
+            
             user.setDocument(txDocument.getText());
             if (!UsersController.Add(user)) {
                 JOptionPane.showMessageDialog(null, UsersController.Exception.toString());

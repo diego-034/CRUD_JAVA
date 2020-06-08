@@ -8,8 +8,6 @@ package screens;
 import Controllers.UsersController;
 import Models.Users;
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -22,12 +20,12 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author DIEGO
  */
-@WebServlet(name = "Main", urlPatterns = {"/Main"})
-public class Main extends HttpServlet {
+@WebServlet(name = "Edit", urlPatterns = {"/Edit"})
+public class Edit extends HttpServlet {
 
     private UsersController UsersController;
 
-    public Main() {
+    public Edit() {
         UsersController = new UsersController();
     }
 
@@ -48,10 +46,10 @@ public class Main extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet Main</title>");
+            out.println("<title>Servlet Edit</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet Main at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet Edit at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -69,12 +67,11 @@ public class Main extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        try {
-            boolean bool = UsersController.Delete(request.getParameter("Delete"));
-            PrintWriter out = response.getWriter();
-            out.println(bool);
-        } catch (Exception ex) {
-        }
+        Users user = UsersController.GetUser(request.getParameter("Edit"));
+        PrintWriter out = response.getWriter();
+        Gson gson = new Gson();
+        String json = gson.toJson(user);
+        out.println(json);
     }
 
     /**
@@ -88,21 +85,19 @@ public class Main extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        try {
-            if (request.getParameter("Add") != null) {
-                Users user = new Users();
-                user.setName(request.getParameter("Name"));
-                user.setPassword(request.getParameter("Password"));
-                user.setState(Boolean.parseBoolean(request.getParameter("State")));
-                user.setDocument(request.getParameter("Document"));
-                boolean value = UsersController.Add(user);
-                PrintWriter out = response.getWriter();
-                if (!value) {
-                    out.println(false);
-                }
-                out.println(true);
+        if (request.getParameter("Update") != null) {
+            Users user = new Users();
+            user.setId(Integer.parseInt(request.getParameter("Id")));
+            user.setName(request.getParameter("Name"));
+            user.setPassword(request.getParameter("Password"));
+            user.setState(Boolean.parseBoolean(request.getParameter("State")));
+            user.setDocument(request.getParameter("Document"));
+            boolean value = UsersController.Update(user);
+            PrintWriter out = response.getWriter();
+            if (!value) {
+                out.println(false);
             }
-        } catch (Exception ex) {
+            out.println(true);
         }
     }
 

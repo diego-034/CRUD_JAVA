@@ -9,25 +9,16 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <% UsersController userController = new UsersController(); %>
-<% if (request.getParameter("name") != null) {
-        Users user = new Users();
-        user.setName(request.getParameter("name"));
-        user.setPassword(request.getParameter("password"));
-        user.setState(Boolean.parseBoolean(request.getParameter("state")));        
-        user.setDocument(request.getParameter("document"));
-        if (userController.Add(user)) {%>
-                <script>
-                 alert('¡registro exitoso!');
-                </script>
-<% }
-    }
-%>
 <html>
     <head>
         <title>CRUD JAVA WEB</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <meta http-equiv="Expires" content="0">
+        <meta http-equiv="Last-Modified" content="0">
+        <meta http-equiv="Cache-Control" content="no-cache, mustrevalidate">
+        <meta http-equiv="Pragma" content="no-cache">
     </head>
     <body>
         <h1 class=" h1 text-center text-primary">CRUD</h1>
@@ -36,31 +27,27 @@
                 <div class="form-row">
                     <div class="form-group col-md-3">
                         <label for="inputEmail4">Nombre</label>
-                        <input type="text" name="name" class="form-control" id="inputEmail4">
+                        <input type="text" id="name" class="form-control">
                     </div>
                     <div class="form-group col-md-3">
                         <label for="inputPassword4">Contraseña</label>
-                        <input type="password" name="password"  class="form-control" id="inputPassword4">
+                        <input type="password" id="password"  class="form-control">
                     </div>
                     <div class="form-group col-md-3">
                         <label for="inputState">Estado</label>
-                        <select id="inputState"name="state" class="form-control">
+                        <select id="state" class="form-control">
                             <option value="true">Activo</option>
                             <option value="false">Inactivo</option>
                         </select>
                     </div>
                     <div class="form-group col-md-3">
                         <label for="inputZip">Documento</label>
-                        <input type="number" name="document" class="form-control" id="inputZip">
+                        <input type="number" id="document" class="form-control">
                     </div>
                 </div>
                 <div class="form-group col-md-3">          
-                    <button type="submit" class="btn btn-success">Agregar</button>
-                </div>
-                <div class="form-row">
-                    <div class="form-group col-md-2" style="display:none">
-                        <button type="submit" class="btn btn-primary">Actualizar</button>
-                    </div>
+                    <button type="button" id="bt-Add" class="btn btn-success" onclick="Add()">Agregar</button>
+                    <button type="button" id="bt-Update" style="display:none" class="btn btn-primary" onclick="UpdateLast(this.value)">Actualizar</button>
                 </div>
             </form>
 
@@ -75,21 +62,21 @@
                         <th scope="col">Acción</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody id="Table">
                     <%
                         ArrayList<Users> list = userController.List();
                         if (list != null) {
                             for (Users user : list) {
                     %>
-                    <tr>
+                    <tr id="row<%= user.getId()%>">
                         <th scope="row"><%= user.getId()%></th>
                         <td><%= user.getName()%></td>
                         <td><%= user.getPassword()%></td>
                         <td><%= user.isState()%></td>
                         <td><%= user.getDocument()%></td>
                         <td> 
-                            <button type="submit" value="<%= user.getId()%>" class="btn btn-primary btn-sm" onClick="Update(this.value)">Actualizar</button>
-                            <button type="submit" value="<%= user.getId()%>" class="btn btn-danger btn-sm" onClick="Delete(this.value)">Eliminar</button>
+                            <button type="button" value="<%= user.getId()%>" class="btn btn-primary btn-sm" onclick="Update(this.value)">Actualizar</button>
+                            <button type="button" value="<%= user.getId()%>" class="btn btn-danger btn-sm" onclick="Delete(this.value)">Eliminar</button>
                         </td>
                     </tr>
                     <%                                      }
@@ -98,7 +85,7 @@
             </table>
         </div>
         <script src="http://code.jquery.com/jquery-latest.js"></script>
-        <script src="Ajax.js"></script>
+        <script src="Resources/js/index.js"></script>
     </body>
 </html>
 
